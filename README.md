@@ -75,13 +75,5 @@ The API response is mocked in `utils/mockApi.js`:
 ### ❗ Note:
 > SharePoint's Content Security Policy blocks PDF embedding inside iframes, so we use `window.open()` instead of displaying in a modal.
 
----
-
-## 📸 Screenshots
-
-
-
-
-
 
 
