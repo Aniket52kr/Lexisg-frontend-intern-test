@@ -3,45 +3,76 @@ import QueryInput from "../components/QueryInput";
 import AnswerCard from "../components/AnswerCard";
 import CitationCard from "../components/CitationCard";
 import Loader from "../components/Loader";
+import { fetchLegalAnswer } from "../utils/mockApi";
 
 const LegalAssistant = () => {
     const [query, setQuery] = useState("");
+    const [submittedQuery, setSubmittedQuery] = useState("");
     const [loading, setLoading] = useState(false);
     const [answer, setAnswer] = useState(null);
     const [citations, setCitations] = useState([]);
 
     const handleSubmit = async (e) => {
         e.preventDefault();
+        if (!query.trim()) return;
+
         setLoading(true);
+        setAnswer(null);
+        setCitations([]);
+        setSubmittedQuery(query);
+        setQuery("");
 
-        // Simulated API response (from assignment)
-        const response = {
-            answer: "Yes, under Section 166 of the Motor Vehicles Act, 1988, the claimants are entitled to an addition for future prospects even when the deceased was self-employed and aged 54–55 years at the time of the accident. In Dani Devi v. Pritam Singh, the Court held that 10% of the deceased’s annual income should be added as future prospects.",
-            citations: [
-                {
-                    text: "as the age of the deceased at the time of accident was held to be about 54-55 years by the learned Tribunal, being self-employed, as such, 10% of annual income should have been awarded on account of future prospects.",
-                    source: "Dani_Devi_v_Pritam_Singh.pdf",
-                    link: "https://lexisingapore-my.sharepoint.com/:b:/g/personal/harshit_lexi_sg/EdOegeiR_gdBvQxdyW4xE6oBCDgj5E4Bo5wjvhPHpqgIuQ?e=TEu4vz",
-                },
-            ],
-        };
-
-        // Simulate delay
-        setTimeout(() => {
+        try {
+            const response = await fetchLegalAnswer(query);
             setAnswer(response.answer);
             setCitations(response.citations);
+        } catch (error) {
+            console.error("Error fetching answer:", error);
+        } finally {
             setLoading(false);
-        }, 1500);
+        }
     };
 
     return (
-        <div className="min-h-screen bg-gray-50 flex flex-col justify-start py-6 px-4">
-            <div className="max-w-2xl w-full mx-auto">
-                <h1 className="text-2xl font-bold mb-6 text-center text-gray-800">
-                    Lexi Legal Assistant
-                </h1>
+        <div className="flex flex-col h-screen bg-[#343541] text-white">
+            {/* Header */}
+            <header className="bg-[#40414f] p-4 text-center shadow-sm border-b border-[#2e2f3a]">
+                <h1 className="text-lg font-semibold">Lexi Legal Assistant</h1>
+            </header>
 
-                <div className="mb-6">
+            {/* Message Area */}
+            <main className="flex-1 overflow-y-auto py-6">
+                <div className="max-w-3xl w-full mx-auto px-4">
+                    {submittedQuery && (
+                        <div className="mb-4 text-sm">
+                            <div className="bg-[#40414f] p-4 rounded-lg shadow-sm">
+                                <span className="font-medium text-gray-100">You:</span><br />
+                                {submittedQuery}
+                            </div>
+                        </div>
+                    )}
+
+                    {loading && <Loader />}
+
+                    {answer && (
+                        <div className="mb-4">
+                            <AnswerCard answer={answer} />
+                        </div>
+                    )}
+
+                    {citations.length > 0 && (
+                        <div className="space-y-4">
+                            {citations.map((citation, index) => (
+                                <CitationCard key={index} citation={citation} />
+                            ))}
+                        </div>
+                    )}
+                </div>
+            </main>
+
+            {/* Bottom Input Bar */}
+            <footer className="bg-[#343541] border-t border-[#2e2f3a] p-4 fixed bottom-0 left-0 right-0">
+                <div className="max-w-3xl w-full mx-auto px-4">
                     <QueryInput
                         query={query}
                         setQuery={setQuery}
@@ -49,26 +80,7 @@ const LegalAssistant = () => {
                         loading={loading}
                     />
                 </div>
-
-                {loading && <Loader />}
-
-                {query && !loading && (
-                    <div className="mb-4 bg-white p-4 rounded-lg shadow text-sm text-gray-600">
-                        <span className="font-semibold text-gray-800">You asked:</span><br />
-                        {query}
-                    </div>
-                )}
-
-                {answer && <AnswerCard answer={answer} />}
-
-                {citations.length > 0 && (
-                    <div className="mt-4 space-y-4">
-                        {citations.map((c, index) => (
-                            <CitationCard key={index} citation={c} />
-                        ))}
-                    </div>
-                )}
-            </div>
+            </footer>
         </div>
     );
 };
