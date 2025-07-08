@@ -7,7 +7,6 @@ A minimal React frontend for a Lexi-like legal assistant interface that allows u
 - 📚 View citations from legal documents
 - 🔗 Click to open the original PDF source in a new tab
 
-> Inspired by the legal research use case in the Lexi Frontend Assignment.
 
 ---
 
@@ -22,8 +21,8 @@ A minimal React frontend for a Lexi-like legal assistant interface that allows u
 
 ### 1. Clone the Repository
 ```bash
-git clone https://github.com/your-username/Lexisg-frontend-intern-test.git
-cd Lexisg-frontend-intern-test
+git clone https://github.com/Aniket52kr/Lexisg-frontend-intern-test.git
+cd lexi-frontend-intern-test
 ```
 
 ### 2. Install Dependencies
