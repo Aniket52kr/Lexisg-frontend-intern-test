@@ -38,6 +38,12 @@ Visit: `http://localhost:5173`
 
 ---
 
+## 🚀 Live Demo
+Check out the live deployed app here:
+🔗 https://lexisg.onrender.com
+
+---
+
 ## 💡 Features
 
 - 📝 Text area input with loading spinner
